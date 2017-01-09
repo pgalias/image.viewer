@@ -1,0 +1,19 @@
+  TypeScript Image Zoomer
+  By Paweł Galias pawgalias@gmail.com
+  Copyright (c)
+
+  Version: 1.0.0
+  Last update: 10 Jan 2017
+
+  Usage:
+  $(selector).smoothScroll([options]);
+
+  Available options:
+  @param {string} parent - Reference (class, id, etc) to parent the scroll should be done on
+  @param {number|string} speed - Time of scrolling in *ms* (number) or slow/fast (string)
+  @param {boolean} mobile - Allow swipe events
+  @param {boolean} keyboard - Allow keyboard arrow keys scrolling
+
+  Changelog:
+  1.0.0
+    + initial release

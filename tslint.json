@@ -1,0 +1,13 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "no-trailing-whitespace": false,
+    "no-unused-new": false,
+    "trailing-comma": false,
+    "no-var-requires": false,
+    "no-shadowed-variable": false
+  },
+  "rulesDirectory": [
+
+  ]
+}

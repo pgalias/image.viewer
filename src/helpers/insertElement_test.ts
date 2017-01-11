@@ -1,16 +1,23 @@
-import InsertElement from './InsertElement';
-import GetElement from './GetElement';
+import {byClass, byTag} from "./getElement";
+import {insertInto} from "./insertElement";
 
 const link = "<a href=\"#\">Link</a>";
 
-describe("InsertElement static class", () => {
+describe(" static class", () => {
     let fixture: string;
     let parent;
+    let insertObj;
 
     beforeEach(() => {
         fixture = "<div class=\"container\"> <p class=\"test\">Test</p> </div>";
         document.body.insertAdjacentHTML("afterbegin", fixture);
-        parent = GetElement.byClass("container");
+        parent = byClass("container");
+        insertObj = {
+            content: link,
+            element: false,
+            parent,
+            place: ""
+        };
     });
 
     afterEach(() => {
@@ -18,29 +25,34 @@ describe("InsertElement static class", () => {
     });
 
     it("before: Should prepend sibling for div.container", () => {
-        InsertElement.before(parent, link);
-        const inserted = GetElement.byTag("a");
+        insertObj.place = "b";
+
+        insertInto(insertObj);
+        const inserted = byTag("a");
         expect(inserted).toBeDefined();
         expect(document.body.children[0]).toBe(inserted);
     });
 
     it("after: Should append sibling for div.container", () => {
-        InsertElement.after(parent, link);
-        const inserted = GetElement.byTag("a");
+        insertObj.place = "a";
+        insertInto(insertObj);
+        const inserted = byTag("a");
         expect(inserted).toBeDefined();
         expect(document.body.children[1]).toBe(inserted);
     });
 
     it("firstInside: Should prepend child for div.container", () => {
-        InsertElement.firstInside(parent, link);
-        const inserted = GetElement.byTag("a");
+        insertObj.place = "f";
+        insertInto(insertObj);
+        const inserted = byTag("a");
         expect(inserted).toBeDefined();
         expect(parent.children[0]).toBe(inserted);
     });
 
     it("lastInside: Should append child for div.container", () => {
-        InsertElement.lastInside(parent, link);
-        const inserted = GetElement.byTag("a");
+        insertObj.place = "l";
+        insertInto(insertObj);
+        const inserted = byTag("a");
         expect(inserted).toBeDefined();
         expect(parent.children[1]).toBe(inserted);
     });

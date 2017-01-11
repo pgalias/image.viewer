@@ -1,1 +1,3 @@
-console.log("It's working!");
+import ImageViewer from "./class/ImageViewer";
+
+const iv = new ImageViewer("img", {});

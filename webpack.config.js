@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const fs = require('fs');
 
 const isProduction = process.env.NODE_ENV === 'production';
-const name = `image.viewer.${isProduction ? '.min' : ''}`;
+const name = `image.viewer${isProduction ? '.min' : ''}`;
 const banner = fs.readFileSync('./.HEADER', 'utf8');
 
 let config = {
@@ -12,7 +12,7 @@ let config = {
     plugins: [
         new webpack.BannerPlugin(banner),
     ],
-    entry: ['./src/app.ts'],
+    entry: ['core-js/fn/object/assign', './src/app.ts'],
     output: {
         path: __dirname + '/dist',
         publicPath: '',

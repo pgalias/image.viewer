@@ -5,6 +5,7 @@
     "no-unused-new": false,
     "trailing-comma": false,
     "no-var-requires": false,
+    "no-string-literal": false,
     "no-shadowed-variable": false
   },
   "rulesDirectory": [

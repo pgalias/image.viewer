@@ -1,3 +1,4 @@
+const ExtractText = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 const fs = require('fs');
 
@@ -10,6 +11,7 @@ let config = {
         extensions: ['', '.scss', '.css', '.ts', '.js']
     },
     plugins: [
+        new ExtractText('style.css', {allChunks: true}),
         new webpack.BannerPlugin(banner),
     ],
     entry: ['core-js/fn/object/assign', './src/app.ts'],
@@ -25,7 +27,7 @@ let config = {
             loader: 'ts-loader'
         }, {
             test: /\.s?css$/,
-            loaders: ['style-loader', 'css-loader', 'autoprefixer-loader', 'sass-loader']
+            loader: ExtractText.extract('style-loader', 'css-loader!autoprefixer-loader!sass-loader')
         },]
     },
 };

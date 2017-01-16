@@ -3,6 +3,7 @@ function conf(config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
+            'node_modules/es6-shim/es6-shim.min.js',
             'src/*_test.ts',
             'src/**/*_test.ts'
         ],
@@ -35,7 +36,7 @@ function conf(config) {
             'karma-webpack',
             'karma-phantomjs-launcher',
             'karma-jasmine',
-            'karma-spec-reporter'
+            'karma-spec-reporter',
         ]
     });
 }

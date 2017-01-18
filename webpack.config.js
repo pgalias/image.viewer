@@ -17,7 +17,6 @@ let config = {
     entry: ['core-js/fn/object/assign', './src/app.ts'],
     output: {
         path: __dirname + '/dist',
-        publicPath: '',
         filename: `${name}.js`
     },
     module: {
@@ -29,6 +28,9 @@ let config = {
             test: /\.s?css$/,
             loader: ExtractText.extract('style-loader', 'css-loader!autoprefixer-loader!sass-loader')
         },]
+    },
+    devServer: {
+        contentBase: './'
     },
 };
 

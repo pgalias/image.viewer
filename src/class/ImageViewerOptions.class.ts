@@ -7,7 +7,6 @@ class ImageViewerOptions implements IImageViewer {
     public onInit: Function;
     public onDisable: Function;
     public onExpand: Function;
-    public scale: number;
 
     constructor(args: IImageViewer) {
         this.scrollable = args.scrollable;
@@ -16,7 +15,6 @@ class ImageViewerOptions implements IImageViewer {
         this.onInit = args.onInit;
         this.onDisable = args.onDisable;
         this.onExpand = args.onExpand;
-        this.scale = args.scale;
     }
 }
 

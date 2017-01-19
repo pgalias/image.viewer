@@ -4,10 +4,10 @@ interface IImage {
 }
 
 class Image implements IImage {
-    public element: HTMLElement;
+    public element: HTMLImageElement;
     private zoomed: boolean;
 
-    constructor(element: HTMLElement) {
+    constructor(element: HTMLImageElement) {
         this.element = element;
         this.zoomed = false;
     }
@@ -18,6 +18,17 @@ class Image implements IImage {
 
     get zoom(): boolean {
         return this.zoomed;
+    }
+
+    public calculateSizes() {
+        // natural sizes
+        const nx = this.element.naturalWidth;
+        const ny = this.element.naturalHeight;
+        // actual sizes
+        const x = this.element.width;
+        const y = this.element.height;
+
+        return { x, y, nx, ny };
     }
 }
 

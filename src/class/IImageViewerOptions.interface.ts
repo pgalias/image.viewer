@@ -5,7 +5,6 @@ interface IImageViewerOptions {
     onInit: Function;
     onDisable: Function;
     onExpand: Function;
-    scale: number;
 }
 
 export default IImageViewerOptions;

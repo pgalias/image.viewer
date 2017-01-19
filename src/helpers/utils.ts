@@ -29,11 +29,15 @@ function scrollPosition(): Object {
     return {x, y};
 }
 
-function assignStyles(element: HTMLElement, styles: Object) {
+function assignStyles(element: HTMLElement, styles: Object): void {
     Object.assign(element.style, styles);
 }
 
-function eventHandler(el, evtType, handler) {
+function removeStyles(element: HTMLElement): void {
+    element.removeAttribute("style");
+}
+
+function eventHandler(el, evtType, handler): void {
     if (el.addEventListener) {
         el.addEventListener(evtType, handler, false);
     } else if (el.attachEvent) {
@@ -41,4 +45,4 @@ function eventHandler(el, evtType, handler) {
     }
 }
 
-export {assignStyles, documentSize, elementPosition, elementSizes, eventHandler, scrollPosition};
+export {assignStyles, documentSize, elementPosition, elementSizes, eventHandler, removeStyles, scrollPosition};

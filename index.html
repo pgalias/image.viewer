@@ -3,8 +3,9 @@
     <title></title>
     <meta content="">
     <style>
-        body {
-            padding: 0 550px;
+        .container {
+            max-width: 768px;
+            margin: 10px auto;
         }
         * {
             margin: 0;
@@ -25,7 +26,8 @@
             height: 100%;
             position: fixed;
             background-color: white;
-            margin-left: -50px;
+            top: 0;
+            left: 0;
         }
         .iv-caption {
             position: relative;
@@ -44,15 +46,17 @@
     </style>
   </head>
   <body>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vulputate eros ut nibh vulputate hendrerit. Nunc quis aliquet libero. Nulla a mattis nulla, commodo auctor sapien. Ut ex ligula, faucibus vitae odio ac, semper laoreet magna. Etiam non orci varius, dignissim sem dapibus, scelerisque mi. Maecenas maximus rutrum purus, quis convallis elit dignissim nec. Nunc sit amet metus nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean suscipit velit non lorem suscipit, a eleifend massa varius. Nunc leo ex, facilisis eget luctus vel, efficitur a erat. </p>
-    <img src="https://placekitten.com/800/700" alt="Obrazek dupy" class="js_iv-img" data-iv-caption="Mruczek">
-    <p>Fusce faucibus ut mi ac vestibulum. Sed tincidunt egestas placerat. Suspendisse sed erat a nisl molestie tempor vel eget mi. Suspendisse potenti. Pellentesque lorem leo, elementum sit amet mauris at, elementum accumsan justo. Quisque euismod laoreet finibus. Praesent congue dictum turpis ut suscipit. Praesent porta malesuada quam, in feugiat arcu efficitur in. Ut pharetra efficitur magna, sit amet egestas lorem varius in. Aenean luctus consequat ex non scelerisque. Duis viverra scelerisque diam, a venenatis mi rhoncus sed. Aliquam at nisi vitae sapien egestas posuere eu sed mauris.</p>
-    <img src="https://placekitten.com/800/700" alt="Obrazek dupy" class="js_iv-img">
-    <p>Suspendisse at ante dolor. Maecenas gravida pellentesque sapien tristique maximus. Mauris a ante quis sapien rutrum suscipit. In tincidunt nisi vel nisl viverra, quis vehicula nisi mollis. Sed id est a turpis porta pulvinar nec a diam. Aliquam fringilla eros lorem. Etiam lectus nisi, vulputate a erat id, laoreet finibus nisi. Vivamus congue id massa sed fringilla. Aenean eget volutpat purus. Aliquam ac massa dapibus dui ornare convallis. Pellentesque varius in ante sed pharetra. Maecenas eros odio, tempus eget arcu eget, tempor blandit dui. Proin venenatis lacus neque, id pulvinar mi dapibus ac.</p>
-    <img src="https://placekitten.com/800/700" alt="Obrazek dupy" class="js_iv-img">
-    <p>Proin elementum sem efficitur posuere sodales. Aliquam ut varius justo. Sed laoreet quis risus a laoreet. Suspendisse ac eros et magna facilisis dignissim. Suspendisse commodo aliquam risus. Cras consectetur feugiat ipsum dapibus tincidunt. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi pretium felis gravida aliquet pellentesque. Suspendisse eu magna a ex imperdiet faucibus at vel risus. Suspendisse ac justo consectetur, facilisis metus ac, viverra nulla. Aenean placerat scelerisque risus vitae euismod. Phasellus vitae ante sed neque rutrum porttitor quis a purus. Sed eu urna nec mi pharetra euismod id et justo. Maecenas tempus justo ligula, ultricies viverra urna dapibus sit amet.</p>
-    <img src="https://placekitten.com/800/700" alt="Obrazek dupy" class="js_iv-img">
-    <p>Aenean ut ex in est rutrum molestie. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sit amet dolor elementum quam aliquet tincidunt id a nisl. Morbi nec dolor convallis, pharetra risus vel, pulvinar erat. Vivamus nec orci facilisis, ullamcorper libero vel, elementum leo. Sed quis sagittis quam. Fusce rutrum metus orci, fermentum aliquam lacus euismod interdum. Cras condimentum purus vel nunc sagittis sollicitudin.</p>
+    <div class="container">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vulputate eros ut nibh vulputate hendrerit. Nunc quis aliquet libero. Nulla a mattis nulla, commodo auctor sapien. Ut ex ligula, faucibus vitae odio ac, semper laoreet magna. Etiam non orci varius, dignissim sem dapibus, scelerisque mi. Maecenas maximus rutrum purus, quis convallis elit dignissim nec. Nunc sit amet metus nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean suscipit velit non lorem suscipit, a eleifend massa varius. Nunc leo ex, facilisis eget luctus vel, efficitur a erat. </p>
+        <img src="https://placekitten.com/800/700" alt="Obrazek dupy" class="js_iv-img" data-iv-caption="Mruczek">
+        <p>Fusce faucibus ut mi ac vestibulum. Sed tincidunt egestas placerat. Suspendisse sed erat a nisl molestie tempor vel eget mi. Suspendisse potenti. Pellentesque lorem leo, elementum sit amet mauris at, elementum accumsan justo. Quisque euismod laoreet finibus. Praesent congue dictum turpis ut suscipit. Praesent porta malesuada quam, in feugiat arcu efficitur in. Ut pharetra efficitur magna, sit amet egestas lorem varius in. Aenean luctus consequat ex non scelerisque. Duis viverra scelerisque diam, a venenatis mi rhoncus sed. Aliquam at nisi vitae sapien egestas posuere eu sed mauris.</p>
+        <img src="https://placekitten.com/900/700" alt="Obrazek dupy" class="js_iv-img">
+        <p>Suspendisse at ante dolor. Maecenas gravida pellentesque sapien tristique maximus. Mauris a ante quis sapien rutrum suscipit. In tincidunt nisi vel nisl viverra, quis vehicula nisi mollis. Sed id est a turpis porta pulvinar nec a diam. Aliquam fringilla eros lorem. Etiam lectus nisi, vulputate a erat id, laoreet finibus nisi. Vivamus congue id massa sed fringilla. Aenean eget volutpat purus. Aliquam ac massa dapibus dui ornare convallis. Pellentesque varius in ante sed pharetra. Maecenas eros odio, tempus eget arcu eget, tempor blandit dui. Proin venenatis lacus neque, id pulvinar mi dapibus ac.</p>
+        <img src="https://placekitten.com/1000/700" alt="Obrazek dupy" class="js_iv-img">
+        <p>Proin elementum sem efficitur posuere sodales. Aliquam ut varius justo. Sed laoreet quis risus a laoreet. Suspendisse ac eros et magna facilisis dignissim. Suspendisse commodo aliquam risus. Cras consectetur feugiat ipsum dapibus tincidunt. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi pretium felis gravida aliquet pellentesque. Suspendisse eu magna a ex imperdiet faucibus at vel risus. Suspendisse ac justo consectetur, facilisis metus ac, viverra nulla. Aenean placerat scelerisque risus vitae euismod. Phasellus vitae ante sed neque rutrum porttitor quis a purus. Sed eu urna nec mi pharetra euismod id et justo. Maecenas tempus justo ligula, ultricies viverra urna dapibus sit amet.</p>
+        <img src="https://placekitten.com/800/800" alt="Obrazek dupy" class="js_iv-img">
+        <p>Aenean ut ex in est rutrum molestie. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sit amet dolor elementum quam aliquet tincidunt id a nisl. Morbi nec dolor convallis, pharetra risus vel, pulvinar erat. Vivamus nec orci facilisis, ullamcorper libero vel, elementum leo. Sed quis sagittis quam. Fusce rutrum metus orci, fermentum aliquam lacus euismod interdum. Cras condimentum purus vel nunc sagittis sollicitudin.</p>
+    </div>
     
     <script src="image.viewer.js"></script>
   </body>

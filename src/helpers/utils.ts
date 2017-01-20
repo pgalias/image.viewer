@@ -18,6 +18,8 @@ function documentSize(): Object {
     const g = byTag("body");
     const x = w.innerWidth || e.clientWidth || g.clientWidth;
     const y = w.innerHeight || e.clientHeight || g.clientHeight;
+    // const x = e.clientWidth || g.clientWidth;
+    // const y = e.clientHeight || g.clientHeight;
     return {x, y};
 }
 

@@ -114,8 +114,8 @@ class ImageViewer {
 
         // image natural sizes
         const { ["nx"]: imgNW, ["ny"]: imgNH } = img.calculateSizes();
-        // image actual sizes
-        const { ["x"]: imgW, ["y"]: imgH } = img.calculateSizes();
+        // image actual sizeX
+        const { ["x"]: imgW } = img.calculateSizes();
         // viewport sizes
         const { ["x"]: viewportW, ["y"]: viewportH } = utils.documentSize() as any;
 
@@ -127,9 +127,9 @@ class ImageViewer {
         if (imgNW < viewportW && imgNH < viewportH) {
             return imgFactor;
         } else if (imgAspectRatio < viewportAspectRatio) {
-            return (viewportH / imgH) * imgFactor;
+            return (viewportH / imgNH) * imgFactor;
         } else {
-            return (viewportW / imgW) * imgFactor;
+            return (viewportW / imgNW) * imgFactor;
         }
     }
 

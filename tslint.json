@@ -6,7 +6,8 @@
     "trailing-comma": false,
     "no-var-requires": false,
     "no-string-literal": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "no-namespace": false
   },
   "rulesDirectory": [
 

@@ -17,7 +17,10 @@ let config = {
     entry: ['core-js/fn/object/assign', './src/app.ts'],
     output: {
         path: __dirname + '/dist',
-        filename: `${name}.js`
+        filename: `${name}.js`,
+        library: 'iv',
+        libraryTarget: 'umd',
+        umdNamedDefine: true
     },
     module: {
         loaders: [{

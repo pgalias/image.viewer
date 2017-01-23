@@ -19,7 +19,17 @@
  *   1.0.0
  *     + initial release
  */
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("iv", [], factory);
+	else if(typeof exports === 'object')
+		exports["iv"] = factory();
+	else
+		root["iv"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -593,10 +603,10 @@
 
 	"use strict";
 	var ImageViewer_1 = __webpack_require__(39);
-	window.addEventListener("load", function load() {
-	    window.removeEventListener("load", load, false);
-	    var iv = new ImageViewer_1.default("img", { scale: 1.1 });
-	});
+	function init(query, options) {
+	    new ImageViewer_1.default(query, options);
+	}
+	exports.init = init;
 
 
 /***/ },
@@ -604,87 +614,128 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var getElement_1 = __webpack_require__(40);
-	var insertElement_1 = __webpack_require__(41);
-	var utils = __webpack_require__(42);
-	var Image_class_1 = __webpack_require__(43);
+	var crElement_1 = __webpack_require__(40);
+	var getElement_1 = __webpack_require__(41);
+	var insertElement_1 = __webpack_require__(42);
+	var utils = __webpack_require__(43);
+	var Image_class_1 = __webpack_require__(44);
 	var ImageViewer = (function () {
 	    function ImageViewer(query, options) {
 	        if (options === void 0) { options = {}; }
 	        var _this = this;
 	        this.elements = [];
 	        this.options = Object.assign({}, ImageViewer.defaults, options);
+	        this.zoomed = false;
+	        var elementsArray = getElement_1.convertNodeToArray(getElement_1.byQuery(query, true));
+	        elementsArray.forEach(function (item) { return _this.elements.push(new Image_class_1.default(item)); });
+	        this.elements.forEach(function (item) {
+	            if (item.element.tagName === "IMG" || item.element.tagName === "img") {
+	                utils.eventHandler(item.element, "click", function () { return _this.clickHandler(item); });
+	            }
+	        });
+	        utils.eventHandler(window, "scroll", function () {
+	            if (_this.zoomed) {
+	                _this.zoomOut(_this.elements[_this.currentImg]);
+	            }
+	        });
+	    }
+	    ImageViewer.prototype.zoomIn = function (image) {
+	        var _a = this.calculateTranslate(), tx = _a.tx, ty = _a.ty, tz = _a.tz;
+	        var translate3d = "translate3d(" + tx + "px, " + ty + "px, " + tz + "px)";
+	        var scale = "scale(" + this.calculateScale() + ")";
+	        utils.assignStyles(image.element, {
+	            position: "relative",
+	            transform: translate3d + " " + scale,
+	            transitionTimingFunction: this.options.easing,
+	            zIndex: 666,
+	        });
 	        insertElement_1.insertInto({
-	            content: "<div class=\"iv-overlay\"><p class=\"iv-caption\"></p></div>",
+	            content: "<div class=\"iv-overlay\"><p class=\"iv-caption\">Caption</p></div>",
 	            element: false,
 	            parent: document.body,
 	            place: "f"
 	        });
-	        this.overlay = getElement_1.byQuery("div.iv-overlay");
-	        this.caption = getElement_1.byQuery("p.iv-caption");
-	        var elementsArray = getElement_1.convertNodeToArray(getElement_1.byQuery(query, true));
-	        elementsArray.forEach(function (item) { return _this.elements.push(new Image_class_1.default(item)); });
-	        this.elements.forEach(function (item) { return utils.eventHandler(item.element, "click", function () { return _this.clickHandler(item); }); });
-	    }
+	        var overlay = getElement_1.byQuery("div.iv-overlay");
+	        utils.assignStyles(overlay, {
+	            backgroundColor: this.options.overlayColor,
+	            zIndex: 600
+	        });
+	        var attr = image.element.getAttribute("data-iv-caption");
+	        if (attr) {
+	            setTimeout(function () {
+	                var caption = getElement_1.byQuery("p.iv-caption");
+	                caption.innerText = attr;
+	                utils.assignStyles(caption, { transform: "translate3d(0,0,0)" });
+	            }, 50);
+	        }
+	        this.zoomed = true;
+	        image.zoom = !image.zoom;
+	    };
+	    ImageViewer.prototype.zoomOut = function (image) {
+	        utils.assignStyles(image.element, {
+	            position: "static",
+	            transform: "translate3d(0,0,0) scale(1)",
+	            zIndex: 1
+	        });
+	        crElement_1.removeElement(getElement_1.byQuery("div.iv-overlay"));
+	        this.zoomed = false;
+	        image.zoom = !image.zoom;
+	    };
 	    ImageViewer.prototype.clickHandler = function (el) {
 	        var self = el;
-	        if (!self.zoom) {
-	            var elPositions = utils.elementPosition(self.element);
-	            var elSizes = utils.elementSizes(self.element);
-	            var scrollPosition = utils.scrollPosition()["y"];
-	            var docSizes = utils.documentSize();
-	            // translate3d values
-	            var tx = (docSizes["x"] / 2 - elSizes["x"] / 2) - elPositions["x"];
-	            var ty = scrollPosition + docSizes["y"] / 2 - (elPositions["y"] + elSizes["y"] / 2);
-	            var tz = 0;
-	            var translate3d = "translate3d(" + tx + "px, " + ty + "px, " + tz + "px)";
-	            var scale = "scale(" + this.options.scale + ")";
-	            utils.assignStyles(self.element, {
-	                position: "relative",
-	                transform: translate3d + " " + scale,
-	                zIndex: 666
-	            });
-	            // set overlay div as visible
-	            this.zoom(true);
-	            var attr = self.element.getAttribute("data-iv-caption");
-	            if (attr) {
-	                this.caption.innerText = attr;
-	                utils.assignStyles(this.caption, {
-	                    opacity: 1,
-	                    transform: "translate3d(0,0,0)"
-	                });
+	        this.currentImg = this.elements.indexOf(self);
+	        var _a = this.elements[this.currentImg].calculateSizes(), x = _a.x, nx = _a.nx, y = _a.y, ny = _a.ny;
+	        // if natural sizes and actual sizes are equal then its not necessary to zoom img
+	        if (x < nx && y < ny) {
+	            if (!self.zoom) {
+	                this.zoomIn(self);
+	            }
+	            else {
+	                this.zoomOut(self);
 	            }
 	        }
-	        else {
-	            utils.assignStyles(self.element, {
-	                position: "static",
-	                transform: "translate3d(0,0,0) scale(1)"
-	            });
-	            // set overlay div as hidden
-	            this.zoom(false);
-	            this.caption.innerText = "";
-	            utils.assignStyles(this.caption, {
-	                opacity: 0,
-	                transform: "translate3d(0,1000%,0)"
-	            });
-	        }
-	        self.zoom = !self.zoom;
 	    };
 	    ;
-	    ImageViewer.prototype.zoom = function (willExpand) {
-	        if (willExpand) {
-	            utils.assignStyles(this.overlay, {
-	                display: "block",
-	                zIndex: 665
-	            });
+	    ImageViewer.prototype.calculateScale = function () {
+	        var img = this.elements[this.currentImg];
+	        // image natural sizes
+	        var _a = img.calculateSizes(), imgNW = _a["nx"], imgNH = _a["ny"];
+	        // image actual sizeX
+	        var imgW = img.calculateSizes()["x"];
+	        // viewport sizes
+	        var _b = utils.documentSize(), viewportW = _b["x"], viewportH = _b["y"];
+	        var imgAspectRatio = imgNW / imgNH;
+	        var viewportAspectRatio = viewportW / viewportH;
+	        var imgFactor = imgNW / imgW;
+	        if (imgNW < viewportW && imgNH < viewportH) {
+	            return imgFactor;
+	        }
+	        else if (imgAspectRatio < viewportAspectRatio) {
+	            return (viewportH / imgNH) * imgFactor;
 	        }
 	        else {
-	            utils.assignStyles(this.overlay, {
-	                display: "none",
-	                zIndex: 0
-	            });
+	            return (viewportW / imgNW) * imgFactor;
 	        }
 	    };
+	    ImageViewer.prototype.calculateTranslate = function () {
+	        var self = this.elements[this.currentImg].element;
+	        var _a = utils.elementPosition(self), elPosX = _a["x"], elPosY = _a["y"];
+	        var _b = utils.elementSizes(self), elSizeX = _b["x"], elSizeY = _b["y"];
+	        var scrollPosY = utils.scrollPosition()["y"];
+	        var _c = utils.documentSize(), docSizeX = _c["x"], docSizeY = _c["y"];
+	        // translate3d values
+	        var tx = (docSizeX / 2 - elSizeX / 2) - elPosX;
+	        var ty = scrollPosY + docSizeY / 2 - (elPosY + elSizeY / 2);
+	        var tz = 0;
+	        return { tx: tx, ty: ty, tz: tz };
+	    };
+	    Object.defineProperty(ImageViewer.prototype, "current", {
+	        get: function () {
+	            return this.elements[this.currentImg];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    return ImageViewer;
 	}());
 	ImageViewer.defaults = {
@@ -693,7 +744,6 @@
 	    onExpand: function () { return 0; },
 	    onInit: function () { return 0; },
 	    overlayColor: "#444",
-	    scale: 1.2,
 	    scrollable: true,
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -702,6 +752,21 @@
 
 /***/ },
 /* 40 */
+/***/ function(module, exports) {
+
+	"use strict";
+	function createElement(element) {
+	    return document.createElement(element);
+	}
+	exports.createElement = createElement;
+	function removeElement(element) {
+	    document.body.removeChild(element);
+	}
+	exports.removeElement = removeElement;
+
+
+/***/ },
+/* 41 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -735,7 +800,7 @@
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -762,11 +827,11 @@
 
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var getElement_1 = __webpack_require__(40);
+	var getElement_1 = __webpack_require__(41);
 	function elementPosition(element) {
 	    var x = element.offsetLeft - element.scrollLeft + element.clientLeft;
 	    var y = element.offsetTop - element.scrollTop + element.clientTop;
@@ -785,6 +850,8 @@
 	    var g = getElement_1.byTag("body");
 	    var x = w.innerWidth || e.clientWidth || g.clientWidth;
 	    var y = w.innerHeight || e.clientHeight || g.clientHeight;
+	    // const x = e.clientWidth || g.clientWidth;
+	    // const y = e.clientHeight || g.clientHeight;
 	    return { x: x, y: y };
 	}
 	exports.documentSize = documentSize;
@@ -800,6 +867,10 @@
 	    Object.assign(element.style, styles);
 	}
 	exports.assignStyles = assignStyles;
+	function removeStyles(element) {
+	    element.removeAttribute("style");
+	}
+	exports.removeStyles = removeStyles;
 	function eventHandler(el, evtType, handler) {
 	    if (el.addEventListener) {
 	        el.addEventListener(evtType, handler, false);
@@ -812,7 +883,7 @@
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -831,6 +902,15 @@
 	        enumerable: true,
 	        configurable: true
 	    });
+	    Image.prototype.calculateSizes = function () {
+	        // natural sizes
+	        var nx = this.element.naturalWidth;
+	        var ny = this.element.naturalHeight;
+	        // actual sizes
+	        var x = this.element.width;
+	        var y = this.element.height;
+	        return { x: x, y: y, nx: nx, ny: ny };
+	    };
 	    return Image;
 	}());
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -838,5 +918,7 @@
 
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;
 //# sourceMappingURL=image.viewer.js.map

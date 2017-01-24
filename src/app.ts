@@ -11,7 +11,6 @@ export function init(query: string, options: Object | ImageViewerOptions) {
 
     eventHandler(window, "scroll", scrollHandler);
     eventHandler(window, "touchstart", touchStartHandler);
-    eventHandler(window, "click", clickHandler, true);
     eventHandler(window, "keyup", keyupHandler);
 }
 

@@ -36,11 +36,6 @@ class ImageViewer {
                 }
             }
         );
-        // utils.eventHandler(window, "scroll", () => {
-        //     if (this.zoomed) {
-        //         this.zoomOut(this.elements[this.currentImg]);
-        //     }
-        // });
     }
 
     public zoomIn(image: Image): void {
@@ -62,6 +57,7 @@ class ImageViewer {
             place: "f"
         });
         const overlay = byQuery("div.iv-overlay") as HTMLElement;
+        utils.eventHandler(overlay, "click", this.overlayEvent);
 
         utils.assignStyles(overlay, {
             backgroundColor: this.options.overlayColor,
@@ -88,7 +84,9 @@ class ImageViewer {
             zIndex: 1
         });
 
-        removeElement(byQuery("div.iv-overlay") as HTMLElement);
+        const overlay = byQuery("div.iv-overlay");
+        overlay.removeEventListener("click", this.overlayEvent);
+        removeElement(overlay as HTMLElement);
 
         this.zoomed = false;
         image.zoom = !image.zoom;
@@ -154,7 +152,11 @@ class ImageViewer {
 
         return {tx, ty, tz};
     }
-    
+
+    private overlayEvent = () => {
+        this.zoomOut(this.current);
+    }
+
     get current(): Image {
         return this.elements[this.currentImg];
     }

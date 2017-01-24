@@ -36,11 +36,11 @@ class ImageViewer {
                 }
             }
         );
-        utils.eventHandler(window, "scroll", () => {
-            if (this.zoomed) {
-                this.zoomOut(this.elements[this.currentImg]);
-            }
-        });
+        // utils.eventHandler(window, "scroll", () => {
+        //     if (this.zoomed) {
+        //         this.zoomOut(this.elements[this.currentImg]);
+        //     }
+        // });
     }
 
     public zoomIn(image: Image): void {
@@ -92,6 +92,12 @@ class ImageViewer {
 
         this.zoomed = false;
         image.zoom = !image.zoom;
+    }
+
+    public closeCurrent(): void {
+        if (this.zoomed) {
+            this.zoomOut(this.current);
+        }
     }
 
     private clickHandler(el: Image): void {

@@ -18,8 +18,6 @@ function documentSize(): Object {
     const g = byTag("body");
     const x = w.innerWidth || e.clientWidth || g.clientWidth;
     const y = w.innerHeight || e.clientHeight || g.clientHeight;
-    // const x = e.clientWidth || g.clientWidth;
-    // const y = e.clientHeight || g.clientHeight;
     return {x, y};
 }
 
@@ -39,9 +37,9 @@ function removeStyles(element: HTMLElement): void {
     element.removeAttribute("style");
 }
 
-function eventHandler(el, evtType, handler): void {
+function eventHandler(el, evtType, handler, bubbling: boolean = false): void {
     if (el.addEventListener) {
-        el.addEventListener(evtType, handler, false);
+        el.addEventListener(evtType, handler, bubbling);
     } else if (el.attachEvent) {
         el.attachEvent(`on${evtType}`, handler);
     }

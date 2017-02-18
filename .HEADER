@@ -2,18 +2,18 @@
   By Paweł Galias pawgalias@gmail.com
   Copyright (c)
 
-  Version: 1.0.0
-  Last update: 10 Jan 2017
+  Version: 0.1.0
+  Last update: 18 Feb 2017
 
   Usage:
-  $(selector).smoothScroll([options]);
+  iv.init(query, options);
 
   Available options:
-  @param {string} parent - Reference (class, id, etc) to parent the scroll should be done on
-  @param {number|string} speed - Time of scrolling in *ms* (number) or slow/fast (string)
-  @param {boolean} mobile - Allow swipe events
-  @param {boolean} keyboard - Allow keyboard arrow keys scrolling
+  @param {string} overlayColor - background-color of image overlay (default: #444)
+  @param {string} easing - Image zooming css-valid easing function (default: linear)
+
+  Every img tag can contain a data-iv-caption attribute with string value which is a caption of image and its displaying after zoom.
 
   Changelog:
-  1.0.0
-    + initial release
+  0.1.0
+    + pre release

@@ -3,21 +3,21 @@
  *   By Paweł Galias pawgalias@gmail.com
  *   Copyright (c)
  * 
- *   Version: 1.0.0
- *   Last update: 10 Jan 2017
+ *   Version: 0.1.0
+ *   Last update: 18 Feb 2017
  * 
  *   Usage:
- *   $(selector).smoothScroll([options]);
+ *   iv.init(query, options);
  * 
  *   Available options:
- *   @param {string} parent - Reference (class, id, etc) to parent the scroll should be done on
- *   @param {number|string} speed - Time of scrolling in *ms* (number) or slow/fast (string)
- *   @param {boolean} mobile - Allow swipe events
- *   @param {boolean} keyboard - Allow keyboard arrow keys scrolling
+ *   @param {string} overlayColor - background-color of image overlay (default: #444)
+ *   @param {string} easing - Image zooming css-valid easing function (default: linear)
+ * 
+ *   Every img tag can contain a data-iv-caption attribute with string value which is a caption of image and its displaying after zoom.
  * 
  *   Changelog:
- *   1.0.0
- *     + initial release
+ *   0.1.0
+ *     + pre release
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -603,10 +603,55 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	var ImageViewer_1 = __webpack_require__(39);
+	var utils_1 = __webpack_require__(43);
+	var iv;
+	var initialScrollPos = -1;
+	var initialTouchPos = -1;
 	function init(query, options) {
-	    new ImageViewer_1.default(query, options);
+	    iv = new ImageViewer_1.default(query, options);
+	    utils_1.eventHandler(window, "scroll", scrollHandler);
+	    utils_1.eventHandler(window, "touchstart", touchStartHandler);
+	    utils_1.eventHandler(window, "keyup", keyupHandler);
 	}
 	exports.init = init;
+	function closeCurrent() {
+	    iv.closeCurrent();
+	}
+	exports.closeCurrent = closeCurrent;
+	function scrollHandler() {
+	    if (initialScrollPos === -1) {
+	        initialScrollPos = window.pageYOffset;
+	    }
+	    if (Math.abs(initialScrollPos - window.pageYOffset) >= 40) {
+	        closeCurrent();
+	    }
+	}
+	function touchStartHandler(e) {
+	    var t = e.touches[0];
+	    if (t == null) {
+	        return;
+	    }
+	    initialTouchPos = t.pageY;
+	    utils_1.eventHandler(e.target, "touchmove", touchMoveHandler);
+	}
+	function touchMoveHandler(e) {
+	    var t = e.touches[0];
+	    if (t == null) {
+	        return;
+	    }
+	    if (Math.abs(t.pageY - initialTouchPos) > 10) {
+	        closeCurrent();
+	        e.target.removeEventListener("touchmove", touchMoveHandler);
+	    }
+	}
+	function keyupHandler(e) {
+	    // esc, up, down
+	    var closeKeys = [27, 38, 40];
+	    var c = e.which || e.keyCode;
+	    if (closeKeys.indexOf(c) > -1) {
+	        closeCurrent();
+	    }
+	}
 
 
 /***/ },
@@ -623,6 +668,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function ImageViewer(query, options) {
 	        if (options === void 0) { options = {}; }
 	        var _this = this;
+	        this.overlayEvent = function () {
+	            _this.zoomOut(_this.current);
+	        };
 	        this.elements = [];
 	        this.options = Object.assign({}, ImageViewer.defaults, options);
 	        this.zoomed = false;
@@ -631,11 +679,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.elements.forEach(function (item) {
 	            if (item.element.tagName === "IMG" || item.element.tagName === "img") {
 	                utils.eventHandler(item.element, "click", function () { return _this.clickHandler(item); });
-	            }
-	        });
-	        utils.eventHandler(window, "scroll", function () {
-	            if (_this.zoomed) {
-	                _this.zoomOut(_this.elements[_this.currentImg]);
 	            }
 	        });
 	    }
@@ -656,6 +699,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            place: "f"
 	        });
 	        var overlay = getElement_1.byQuery("div.iv-overlay");
+	        utils.eventHandler(overlay, "click", this.overlayEvent);
 	        utils.assignStyles(overlay, {
 	            backgroundColor: this.options.overlayColor,
 	            zIndex: 600
@@ -677,9 +721,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            transform: "translate3d(0,0,0) scale(1)",
 	            zIndex: 1
 	        });
-	        crElement_1.removeElement(getElement_1.byQuery("div.iv-overlay"));
+	        var overlay = getElement_1.byQuery("div.iv-overlay");
+	        overlay.removeEventListener("click", this.overlayEvent);
+	        crElement_1.removeElement(overlay);
 	        this.zoomed = false;
 	        image.zoom = !image.zoom;
+	    };
+	    ImageViewer.prototype.closeCurrent = function () {
+	        if (this.zoomed) {
+	            this.zoomOut(this.current);
+	        }
 	    };
 	    ImageViewer.prototype.clickHandler = function (el) {
 	        var self = el;
@@ -850,8 +901,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var g = getElement_1.byTag("body");
 	    var x = w.innerWidth || e.clientWidth || g.clientWidth;
 	    var y = w.innerHeight || e.clientHeight || g.clientHeight;
-	    // const x = e.clientWidth || g.clientWidth;
-	    // const y = e.clientHeight || g.clientHeight;
 	    return { x: x, y: y };
 	}
 	exports.documentSize = documentSize;
@@ -871,9 +920,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    element.removeAttribute("style");
 	}
 	exports.removeStyles = removeStyles;
-	function eventHandler(el, evtType, handler) {
+	function eventHandler(el, evtType, handler, bubbling) {
+	    if (bubbling === void 0) { bubbling = false; }
 	    if (el.addEventListener) {
-	        el.addEventListener(evtType, handler, false);
+	        el.addEventListener(evtType, handler, bubbling);
 	    }
 	    else if (el.attachEvent) {
 	        el.attachEvent("on" + evtType, handler);

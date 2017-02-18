@@ -50,10 +50,6 @@ function touchMoveHandler(e) {
     }
 }
 
-function clickHandler() {
-    closeCurrent();
-}
-
 function keyupHandler(e) {
     // esc, up, down
     const closeKeys = [27, 38, 40];
